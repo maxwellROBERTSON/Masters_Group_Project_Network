@@ -5,6 +5,8 @@
 /GameClient/*.sln
 /GameClient/*.vcxproj.filters
 /GameClient/.vs/*
+/GameClient/Makefile
+/GameClient/*.make
 
 /GameServer/bin
 /GameServer/bin-int
@@ -13,6 +15,8 @@
 /GameServer/*.sln
 /GameServer/*.vcxproj.filters
 /GameServer/.vs/*
+/GameServer/Makefile
+/GameServer/*.make
 
 /yojimbo_test/yojimbo/bin
 /yojimbo_test/yojimbo/obj
