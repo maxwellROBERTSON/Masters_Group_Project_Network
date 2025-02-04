@@ -14,11 +14,11 @@
 /GameServer/*.vcxproj.filters
 /GameServer/.vs/*
 
-# /yojimbo_test/yojimbo/bin
-# /yojimbo_test/yojimbo/obj
-# /yojimbo_test/yojimbo/*.vcxproj
-# /yojimbo_test/yojimbo/*.vcxproj.user
-# /yojimbo_test/yojimbo/*.sln
-# /yojimbo_test/yojimbo/*.slnLaunch.user
-# /yojimbo_test/yojimbo/*.vcxproj.filters
-# /yojimbo_test/yojimbo/.vs/*
+/yojimbo_test/yojimbo/bin
+/yojimbo_test/yojimbo/obj
+/yojimbo_test/yojimbo/*.vcxproj
+/yojimbo_test/yojimbo/*.vcxproj.user
+/yojimbo_test/yojimbo/*.sln
+/yojimbo_test/yojimbo/*.slnLaunch.user
+/yojimbo_test/yojimbo/*.vcxproj.filters
+/yojimbo_test/yojimbo/.vs/*
