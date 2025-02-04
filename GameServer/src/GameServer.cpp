@@ -16,7 +16,7 @@ GameServer::GameServer()
 	server = YOJIMBO_NEW(yojimbo::GetDefaultAllocator(), yojimbo::Server,
 		yojimbo::GetDefaultAllocator(),
 		DEFAULT_PRIVATE_KEY,
-		yojimbo::Address("127.0.0.1", 40000),
+		yojimbo::Address("129.11.146.144", 40000),
 		config,
 		*adapter,
 		time);
