@@ -1,0 +1,24 @@
+/GameClient/bin
+/GameClient/bin-int
+/GameClient/*.vcxproj
+/GameClient/*.vcxproj.user
+/GameClient/*.sln
+/GameClient/*.vcxproj.filters
+/GameClient/.vs/*
+
+/GameServer/bin
+/GameServer/bin-int
+/GameServer/*.vcxproj
+/GameServer/*.vcxproj.user
+/GameServer/*.sln
+/GameServer/*.vcxproj.filters
+/GameServer/.vs/*
+
+# /yojimbo_test/yojimbo/bin
+# /yojimbo_test/yojimbo/obj
+# /yojimbo_test/yojimbo/*.vcxproj
+# /yojimbo_test/yojimbo/*.vcxproj.user
+# /yojimbo_test/yojimbo/*.sln
+# /yojimbo_test/yojimbo/*.slnLaunch.user
+# /yojimbo_test/yojimbo/*.vcxproj.filters
+# /yojimbo_test/yojimbo/.vs/*
