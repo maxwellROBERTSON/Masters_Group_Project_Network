@@ -20,6 +20,10 @@ workspace "GameServer"
         symbols "Off"
         optimize "On"
         defines {"YOJIMBO_RELEASE", "NETCODE_RELEASE", "RELIABLE_RELEASE"}
+    filter "system:windows"
+        defines {"OS_WINDOWS"}
+    filter "system:linux"
+        defines {"OS_LINUX"}
 
     -- Yojimbo Library
     project "Yojimbo"

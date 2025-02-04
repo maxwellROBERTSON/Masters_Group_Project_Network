@@ -5,18 +5,17 @@
 
 static const uint8_t DEFAULT_PRIVATE_KEY[yojimbo::KeyBytes] = { 0 };
 
-GameServer::GameServer()
+GameServer::GameServer(yojimbo::Address address, int maxClients) : maxClients(maxClients)
 {
 	// Initialise adapter
 	adapter = YOJIMBO_NEW(yojimbo::GetDefaultAllocator(), GameAdapter);
 
 	// Initialise server
 	double time = 1.0;
-	maxClients = 2;
 	server = YOJIMBO_NEW(yojimbo::GetDefaultAllocator(), yojimbo::Server,
 		yojimbo::GetDefaultAllocator(),
 		DEFAULT_PRIVATE_KEY,
-		yojimbo::Address("129.11.146.144", 40000),
+		address,
 		config,
 		*adapter,
 		time);
@@ -85,6 +84,10 @@ void GameServer::ProcessMessages()
 					message = (GameMessage*)server->ReceiveMessage(i, j);
 				}
 			}
+		}
+		else
+		{
+			server->DisconnectClient(i);
 		}
 	}
 }

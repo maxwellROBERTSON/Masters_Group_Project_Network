@@ -4,7 +4,7 @@
 class GameServer
 {
 public:
-	GameServer();
+	GameServer(yojimbo::Address, int);
 	void Start();
 	void Run();
 	void Update(float);
