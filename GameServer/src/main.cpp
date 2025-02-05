@@ -69,24 +69,16 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 			tmpAddrPtr = &((struct sockaddr_in*)ifa->ifa_addr)->sin_addr;
 			char addressBuffer[INET_ADDRSTRLEN];
 			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
-			if(strcmp(ifa->ifa_name, "enol"))
+			if(!strncmp(ifa->ifa_name, "eno1", 4))
 			{
-				std::cout << "Interface: " << ifa->ifa_name << " - IP Address: " << addressBuffer << std::endl;
-				yojimbo::Address address(addressBuffer);
+				yojimbo::Address address(addressBuffer, port);
 				return address;
-			}
-			else
-			{
-				std::cout << "Interface: " << ifa->ifa_name << " - IP Address: " << addressBuffer << std::endl;
-				//yojimbo::Address address;
-				//return address;
 			}
 		}
 	}
 
-	if (ifAddrStruct != NULL) freeifaddrs(ifAddrStruct);
-	yojimbo::Address address;
-    return address;
+	std::cerr << "No valid inet eno1 device" << std::endl;
+	exit(1);
 }
 
 #endif
@@ -96,7 +88,7 @@ int main(int argc, char* argv[])
 	if (argc != 3)
 	{
 		std::cerr << "Usage: " << argv[0] << " <port> <max_clients>\n";
-		return 1;
+		exit(1);
 	}
 
 	for (int i = 0; i < strlen(argv[1]); i++)
@@ -104,7 +96,7 @@ int main(int argc, char* argv[])
 		if (!isdigit(argv[1][i]))
 		{
 			std::cerr << "Non-integer port number\n";
-			return 1;
+			exit(1);
 		}
 	}
 	for (int i = 0; i < strlen(argv[2]); i++)
@@ -112,7 +104,7 @@ int main(int argc, char* argv[])
 		if (!isdigit(argv[2][i]))
 		{
 			std::cerr << "Non-integer max clients\n";
-			return 1;
+			exit(1);
 		}
 	}
 
@@ -123,19 +115,19 @@ int main(int argc, char* argv[])
     {
 		std::cerr << "Invalid port number\n";
 		std::cerr << "Port number must be between 0 and 65535\n";
-		return 1;
+		exit(1);
     }
 	if (maxClients < 1 || maxClients > 64)
 	{
 		std::cerr << "Invalid max clients\n";
 		std::cerr << "Max clients must be between 1 and 64\n";
-		return 1;
+		exit(1);
 	}
 
     if (!InitializeYojimbo())
     {
         std::cerr << "Failed to initialize Yojimbo\n";
-		return 1;
+		exit(1);
 	}
 	else
 	{
@@ -158,5 +150,5 @@ int main(int argc, char* argv[])
 
 	ShutdownYojimbo();
 
-	return 0;
+	exit(0);
 }
