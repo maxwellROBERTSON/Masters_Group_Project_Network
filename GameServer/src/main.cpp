@@ -46,34 +46,48 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 	return address;
 }
 
-#elif defined(OS_LINUX_MAC)
-//#include <sys/types.h>
-//#include <ifaddrs.h>
-//#include <arpa/inet.h>
-//#include <netinet/in.h>
-//#include <cstring>
-//
-//void GetLocalIPAddress() {
-//    struct ifaddrs* ifAddrStruct = NULL;
-//    struct ifaddrs* ifa = NULL;
-//    void* tmpAddrPtr = NULL;
-//
-//    if (getifaddrs(&ifAddrStruct) == -1) {
-//        std::cerr << "Error getting network interfaces" << std::endl;
-//        return;
-//    }
-//
-//    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
-//        if (ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET) {
-//            tmpAddrPtr = &((struct sockaddr_in*)ifa->ifa_addr)->sin_addr;
-//            char addressBuffer[INET_ADDRSTRLEN];
-//            inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
-//            std::cout << "Interface: " << ifa->ifa_name << " - IP Address: " << addressBuffer << std::endl;
-//        }
-//    }
-//
-//    if (ifAddrStruct != NULL) freeifaddrs(ifAddrStruct);
-//}
+#elif defined(OS_LINUX)
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <cstring>
+
+yojimbo::Address GetLocalIPAddress(uint16_t port) {
+	struct ifaddrs* ifAddrStruct = NULL;
+	struct ifaddrs* ifa = NULL;
+	void* tmpAddrPtr = NULL;
+
+	if (getifaddrs(&ifAddrStruct) == -1) {
+		std::cerr << "Error getting network interfaces" << std::endl;
+		yojimbo::Address address;
+		return address;
+	}
+
+	for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+		if (ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET) {
+			tmpAddrPtr = &((struct sockaddr_in*)ifa->ifa_addr)->sin_addr;
+			char addressBuffer[INET_ADDRSTRLEN];
+			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+			if(strcmp(ifa->ifa_name, "enol"))
+			{
+				std::cout << "Interface: " << ifa->ifa_name << " - IP Address: " << addressBuffer << std::endl;
+				yojimbo::Address address(addressBuffer);
+				return address;
+			}
+			else
+			{
+				std::cout << "Interface: " << ifa->ifa_name << " - IP Address: " << addressBuffer << std::endl;
+				//yojimbo::Address address;
+				//return address;
+			}
+		}
+	}
+
+	if (ifAddrStruct != NULL) freeifaddrs(ifAddrStruct);
+	yojimbo::Address address;
+    return address;
+}
 
 #endif
 
