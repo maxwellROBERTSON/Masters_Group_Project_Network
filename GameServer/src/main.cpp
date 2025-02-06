@@ -1,8 +1,20 @@
 #include <iostream>
 #include <cstdlib>
+#include <regex>
 
 #include "../../third_party/yojimbo/include/yojimbo.h"
 #include "GameServer.hpp"
+
+bool isValidIPAddress(const std::string& ip) {
+	// Define the regex pattern for IPv4 and IPv6
+	const std::string ipPattern = R"(^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$)";
+
+	// Create a regex object
+	std::regex ipRegex(ipPattern);
+
+	// Check if the IP matches the regex pattern
+	return std::regex_match(ip, ipRegex);
+}
 
 #ifdef OS_WINDOWS
 #include <winsock2.h>
@@ -14,15 +26,13 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cerr << "WSAStartup failed!" << std::endl;
-        yojimbo::Address address;
-        return address;
+		exit(1);
     }
 
     if (gethostname(hostname, sizeof(hostname)) == SOCKET_ERROR) {
         std::cerr << "Error getting hostname" << std::endl;
         WSACleanup();
-        yojimbo::Address address;
-        return address;
+		exit(1);
     }
 
     struct addrinfo hints = { 0 }, * info, * p;
@@ -31,14 +41,19 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
     if (getaddrinfo(hostname, NULL, &hints, &info) != 0) {
         std::cerr << "getaddrinfo failed!" << std::endl;
         WSACleanup();
-        yojimbo::Address address;
-        return address;
+		exit(1);
     }
 
     std::string add_str = "";
 
     struct sockaddr_in* addr = (struct sockaddr_in*)info->ai_addr;
 	add_str = inet_ntoa(addr->sin_addr);
+
+	if (!isValidIPAddress(add_str.c_str()))
+	{
+		std::cerr << "Invalid IP address\n";
+		exit(1);
+	}
 
 	yojimbo::Address address(add_str.c_str(), port);
     freeaddrinfo(info);
@@ -60,8 +75,7 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 
 	if (getifaddrs(&ifAddrStruct) == -1) {
 		std::cerr << "Error getting network interfaces" << std::endl;
-		yojimbo::Address address;
-		return address;
+		exit(1);
 	}
 
 	for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
@@ -85,39 +99,47 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 
 int main(int argc, char* argv[])
 {
-	if (argc != 3)
+	if (argc != 1)
 	{
-		std::cerr << "Usage: " << argv[0] << " <port> <max_clients>\n";
+		std::cerr << "Usage: " << argv[0] << "\n";
 		exit(1);
 	}
 
-	for (int i = 0; i < strlen(argv[1]); i++)
+	std::cout << "Enter a port: ";
+	std::string port;
+	std::cin >> port;
+	for (int i = 0; i < port.length(); i++)
 	{
-		if (!isdigit(argv[1][i]))
+		if (!isdigit(port[i]))
 		{
-			std::cerr << "Non-integer port number\n";
-			exit(1);
-		}
-	}
-	for (int i = 0; i < strlen(argv[2]); i++)
-	{
-		if (!isdigit(argv[2][i]))
-		{
-			std::cerr << "Non-integer max clients\n";
+			std::cerr << "Non-integer port\n";
 			exit(1);
 		}
 	}
 
-    int port = std::strtol(argv[1], nullptr, 10);
-	int maxClients = std::strtol(argv[2], nullptr, 10);
+	std::cout << "Enter max number of clients: ";
+	std::string maxClients;
+	std::cin >> maxClients;
 
-	if (port < 0 || port > 65535)
+	for (int i = 0; i < maxClients.length(); i++)
+	{
+		if (!isdigit(maxClients[i]))
+		{
+			std::cerr << "Non-integer maxClients\n";
+			exit(1);
+		}
+	}
+
+	int portInt = std::stoi(port);
+	int maxClientsInt = std::stoi(maxClients);
+
+	if (portInt < 1024 || portInt > 65535)
     {
 		std::cerr << "Invalid port number\n";
-		std::cerr << "Port number must be between 0 and 65535\n";
+		std::cerr << "Port number must be between 1024 and 65535\n";
 		exit(1);
     }
-	if (maxClients < 1 || maxClients > 64)
+	if (maxClientsInt < 1 || maxClientsInt > 64)
 	{
 		std::cerr << "Invalid max clients\n";
 		std::cerr << "Max clients must be between 1 and 64\n";
@@ -141,7 +163,7 @@ int main(int argc, char* argv[])
 #endif
 
 	// start server at address of machine and max clients from command line
-	GameServer server(GetLocalIPAddress(port), 2);
+	GameServer server(GetLocalIPAddress(portInt), 2);
 	server.Start();
 
 	server.Stop();

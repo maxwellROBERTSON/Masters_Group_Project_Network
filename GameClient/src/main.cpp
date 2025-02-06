@@ -23,7 +23,7 @@ int main()
 	if (!isValidIPAddress(ip))
 	{
 		std::cerr << "Invalid IP address\n";
-		return 1;
+		exit(1);
 	}
 
 	std::cout << "Enter a port: ";
@@ -34,14 +34,14 @@ int main()
 		if (!isdigit(port[i]))
 		{
 			std::cerr << "Non-integer port\n";
-			return 1;
+			exit(1);
 		}
 	}
 
     if (!InitializeYojimbo())
     {
         std::cerr << "Failed to initialize Yojimbo\n";
-		return 1;
+		exit(1);
 	}
 	else
 	{
@@ -58,15 +58,11 @@ int main()
 
 	client.Connect();
 
-	while (true)
-	{
-		continue;
-	}
 	client.Disconnect();
 
     std::cout << "Hello World!\n";
 
 	ShutdownYojimbo();
 
-	return 0;
+	exit(0);
 }
