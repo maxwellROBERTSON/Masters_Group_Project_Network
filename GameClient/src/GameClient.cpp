@@ -1,4 +1,5 @@
 #include "GameClient.hpp"
+#include "../../third_party/yojimbo/netcode/netcode.h"
 
 static const uint8_t DEFAULT_PRIVATE_KEY[yojimbo::KeyBytes] = { 0 };
 
@@ -17,11 +18,19 @@ GameClient::GameClient(yojimbo::Address serverAddress) : serverAddress(serverAdd
 		time);
 }
 
+//int GameClient::PingServer()
+//{
+//	Connect();
+//	return 1;
+//}
+
 void GameClient::Connect()
 {
+	//int ping = PingServer();
 	// Connect client
 	uint64_t clientId;
 	yojimbo_random_bytes((uint8_t*)&clientId, 8);
+	const yojimbo::Address serverAddresses[] = { serverAddress, yojimbo::Address("127.0.0.1", 3000) };
 	client->InsecureConnect(DEFAULT_PRIVATE_KEY, clientId, serverAddress);
 	//while (client->IsConnecting())
 	//{

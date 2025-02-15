@@ -2958,7 +2958,7 @@ void netcode_client_process_packet( struct netcode_client_t * client, struct net
     uint64_t current_timestamp = (uint64_t) time( NULL );
 
     uint64_t sequence;
-
+    printf("HERE1");
     void * packet = netcode_read_packet( packet_data, 
                                          packet_bytes, 
                                          &sequence, 
@@ -3019,6 +3019,7 @@ void netcode_client_receive_packets( struct netcode_client_t * client )
                 break;
 
             uint64_t sequence;
+            printf("HERE2");
             void * packet = netcode_read_packet( packet_data, 
                                                  packet_bytes, 
                                                  &sequence, 
@@ -3052,7 +3053,7 @@ void netcode_client_receive_packets( struct netcode_client_t * client )
         for ( i = 0; i < num_packets_received; i++ )
         {
             uint64_t sequence;
-
+            printf("HERE3");
             void * packet = netcode_read_packet( client->receive_packet_data[i], 
                                                  client->receive_packet_bytes[i], 
                                                  &sequence, 
@@ -4575,7 +4576,7 @@ void netcode_server_process_packet( struct netcode_server_t * server, struct net
         netcode_printf( NETCODE_LOG_LEVEL_DEBUG, "server could not process packet because no encryption mapping exists for %s\n", netcode_address_to_string( from, address_string ) );
         return;
     }
-
+    printf("HERE4");
     void * packet = netcode_read_packet( packet_data, 
                                          packet_bytes, 
                                          &sequence, 
@@ -4630,7 +4631,7 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
         netcode_printf( NETCODE_LOG_LEVEL_DEBUG, "server could not process packet because no encryption mapping exists for %s\n", netcode_address_to_string( from, address_string ) );
         return;
     }
-
+    printf("HERE5");
     void * packet = netcode_read_packet( packet_data, 
                                          packet_bytes, 
                                          &sequence, 

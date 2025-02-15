@@ -55,7 +55,7 @@ yojimbo::Address GetLocalIPAddress(uint16_t port) {
 		exit(1);
 	}
 
-	yojimbo::Address address(add_str.c_str(), port);
+	yojimbo::Address address("127.0.0.1", port);
     freeaddrinfo(info);
     WSACleanup();
 	return address;

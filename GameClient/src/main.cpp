@@ -49,7 +49,7 @@ int main()
 	}
 
 #ifdef DEBUG
-	yojimbo_log_level(YOJIMBO_LOG_LEVEL_INFO);
+	yojimbo_log_level(YOJIMBO_LOG_LEVEL_DEBUG);
 #else
 	yojimbo_log_level(YOJIMBO_LOG_LEVEL_INFO);
 #endif
